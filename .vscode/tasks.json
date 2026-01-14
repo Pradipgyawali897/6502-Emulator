@@ -1,0 +1,27 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "cppbuild",
+            "label": "C/C++: g++ build active file",
+            "command": "/usr/bin/g++",
+            "args": [
+                "-std=c++17",                 // Use C++17 standard
+                "-fdiagnostics-color=always", 
+                "-g",                         // Include debug symbols
+                "${file}",                    // Current active file
+                "-o",
+                "${fileDirname}/${fileBasenameNoExtension}" // Output binary same folder
+            ],
+            "options": {
+                "cwd": "${fileDirname}"
+            },
+            "problemMatcher": ["$gcc"],
+            "group": {
+                "kind": "build",
+                "isDefault": true           // <- Default build task
+            },
+            "detail": "Build active C++ file with g++"
+        }
+    ]
+}

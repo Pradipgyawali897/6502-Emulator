@@ -34,6 +34,11 @@ The processor keeps track of the result of the last operation using a set of 1-b
 - **V (Overflow)**: Did the sign bit get messed up?
 - **N (Negative)**: Is the result negative?
 
+#### Status Register Bitfield
+| Bit 7 | Bit 6 | Bit 5 | Bit 4 | Bit 3 | Bit 2 | Bit 1 | Bit 0 |
+| :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
+| **N** | **V** | **-** | **B** | **D** | **I** | **Z** | **C** |
+
 ### Memory Map
 The 6502 can address 64KB of memory. Here is how it is typically laid out:
 
@@ -65,6 +70,18 @@ A small sampling of the instructions we are implementing:
 - **STA / STX / STY**: Store register contents into memory.
 - **ADC** (Add with Carry): `A = A + M + C`.
 - **JMP**: Jump to a new location (sets PC).
+
+### The Reset Sequence
+When the CPU starts (or is reset):
+1. It reads the two bytes at **`$FFFC`** and **`$FFFD`**.
+2. It sets the **Program Counter (PC)** to this value.
+3. This is where your program *begins*.
+
+### Cycle Interpretation
+Every instruction takes a specific number of "cycles" to complete.
+- **Fetch**: Reading the opcode takes 1 cycle.
+- **Decode/Execute**: Doing the work takes 1+ cycles.
+- *Note*: Accessing memory crosses page boundaries can cost extra cycles!
 
 ## Current Implementation Status
 

@@ -43,6 +43,10 @@ struct CPU
     Byte B : 1;  // Break
     Byte V : 1;  // Overflow
     Byte N : 1;  // Negative
+    
+
+    //Instruction up code 
+    static constexpr Byte INS_LDA_IM=0xA9,INS_LDA_ZP=0xA5,INS_LDA_ZPX=0xB5;
 
     void Reset(Mem & memory){ 
         PC=0xFFFC;
@@ -54,14 +58,23 @@ struct CPU
     }
 
 
+    void LDASetStatus(){
+        Z=(A==0);
+        N=(A & 0b10000000)>0;
+    }
+
     Byte FetchByte(u32 & Cycles, Mem & memory){
         Byte Data=memory[PC];
         PC ++;
         Cycles --;
         return Data;
     }
-
-    static constexpr Byte INS_LDA_IM=0xA9;
+    
+    Byte ReadByte(u32 & Cycles,Byte& Address, Mem & memory){
+        Byte Data=memory[Address];
+        Cycles --;
+        return Data;
+    }
 
     void Excute(u32 Cycles,Mem & memory){
          while(Cycles > 0){
@@ -72,8 +85,23 @@ struct CPU
                 {
                     Byte value=FetchByte(Cycles,memory);
                     A=value;
-                    Z=(A==0);
-                    N=(A & 0b10000000)>0;
+                    LDASetStatus();
+                    break;
+                }
+                case INS_LDA_ZP:
+                {
+                    Byte ZeroPageAddress=FetchByte(Cycles,memory);
+                    Byte A= ReadByte(Cycles,ZeroPageAddress,memory);
+                    LDASetStatus();
+                    break;
+                }
+                case INS_LDA_ZPX:
+                {
+                    Byte ZeroPageAddress=FetchByte(Cycles,memory);
+                    ZeroPageAddress +=X;
+                    Cycles--;
+                    Byte A= ReadByte(Cycles,ZeroPageAddress,memory);
+                    LDASetStatus();
                     break;
                 }
                 default:

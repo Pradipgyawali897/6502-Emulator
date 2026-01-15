@@ -34,6 +34,38 @@ The processor keeps track of the result of the last operation using a set of 1-b
 - **V (Overflow)**: Did the sign bit get messed up?
 - **N (Negative)**: Is the result negative?
 
+### Memory Map
+The 6502 can address 64KB of memory. Here is how it is typically laid out:
+
+| Address Range | Description | Notes |
+| :--- | :--- | :--- |
+| `$0000 - $00FF` | **Zero Page** | Faster to access (requires only 1 byte address). Often used for "heavy traffic" variables. |
+| `$0100 - $01FF` | **Stack** | Hardcoded stack capability. `SP` register indexes this page ($0100 + SP). |
+| `$0200 - $FFFF` | **General Purpose RAM** | Where your main program and data live. |
+| `$FFFA - $FFFF` | **Interrupt Vectors** | Addresses where the CPU jumps when things happen (NMI, Reset, IRQ). |
+
+### Addressing Modes
+"Addressing Modes" is just a fancy way of saying: "Where is the data I need to work on?"
+
+- **Implicit**: The data is implied by the instruction (e.g., `TAX` transfers A to X).
+- **Immediate** (`#$nn`): The data is right here in the code.
+  - *Example*: `LDA #$10` (Load the number 16 into A).
+  - *Status*: **Implemented**.
+- **Zero Page** (`$nn`): The data is in the first page of memory.
+- **Zero Page, X/Y** (`$nn,X`): Address is `Address + X`.
+- **Absolute** (`$nnnn`): Data is at a specific 16-bit address.
+- **Absolute, X/Y** (`$nnnn,X`): Address is `Address + X`.
+- **Indirect** (`($nnnn)`): The address contains *another* address (pointers!).
+
+### Instruction Set
+A small sampling of the instructions we are implementing:
+
+- **LDA** (Load Accumulator): Puts a value into the A register. Affected Flags: **Z, N**.
+- **LDX / LDY**: Load Index X / Y.
+- **STA / STX / STY**: Store register contents into memory.
+- **ADC** (Add with Carry): `A = A + M + C`.
+- **JMP**: Jump to a new location (sets PC).
+
 ## Current Implementation Status
 
 We have built the foundational skeleton of the emulator in `main_6502.cpp`. Here is how our code maps to the hardware concepts:

@@ -61,10 +61,26 @@ struct CPU
         return Data;
     }
 
+    static constexpr Byte INS_LDA_IM=0xA9;
 
     void Excute(u32 Cycles,Mem & memory){
          while(Cycles > 0){
             Byte Ins=FetchByte(Cycles,memory);
+
+            switch(Ins){
+                case INS_LDA_IM:
+                {
+                    Byte value=FetchByte(Cycles,memory);
+                    A=value;
+                    Z=(A==0);
+                    N=(A & 0b10000000)>0;
+                    break;
+                }
+                default:
+                    std::cout<<"There is problem on excuting the ilnstruction"<<" "<<Ins;
+                    break;
+
+            }
          }
     }
 

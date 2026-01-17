@@ -24,6 +24,12 @@ struct Mem
         return Data[Address];
     }
 
+    void WriteWord(u32 &Cycles,Word Value,u32 Address){
+        Data[Address]=Value & 0xFF;
+        Data[Address +1]=(Value>>8);
+        Cycles -=2;
+    }
+
 };
 
 struct CPU
@@ -44,9 +50,22 @@ struct CPU
     Byte V : 1;  // Overflow
     Byte N : 1;  // Negative
     
+    Word FetchWord(u32 & Cycles, Mem& memory){
+    Word Data = memory[PC];
+    PC++;
+    Cycles--;
+
+    Data |= (memory[PC] << 8);
+    PC++;
+    Cycles--;
+
+    return Data;
+    }
+
+
 
     //Instruction up code 
-    static constexpr Byte INS_LDA_IM=0xA9,INS_LDA_ZP=0xA5,INS_LDA_ZPX=0xB5;
+    static constexpr Byte INS_LDA_IM=0xA9,INS_LDA_ZP=0xA5,INS_LDA_ZPX=0xB5,INS_JSR=0x20;
 
     void Reset(Mem & memory){ 
         PC=0xFFFC;
@@ -91,7 +110,7 @@ struct CPU
                 case INS_LDA_ZP:
                 {
                     Byte ZeroPageAddress=FetchByte(Cycles,memory);
-                    Byte A= ReadByte(Cycles,ZeroPageAddress,memory);
+                    A= ReadByte(Cycles,ZeroPageAddress,memory);
                     LDASetStatus();
                     break;
                 }
@@ -104,10 +123,17 @@ struct CPU
                     LDASetStatus();
                     break;
                 }
+                case INS_JSR:
+                {
+                   Word SubAddr= FetchWord(Cycles,memory);
+                    memory.WriteWord(Cycles,PC-1,SP);
+                    PC=SubAddr;
+                   Cycles --;
+                   break;
+                }
                 default:
-                    std::cout<<"There is problem on excuting the ilnstruction"<<" "<<Ins;
+                    std::cout<<"There is problem on excuting the instruction"<<" "<<Ins;
                     break;
-
             }
          }
     }
@@ -115,10 +141,34 @@ struct CPU
 };
 
 
+
 int main() {
-   CPU cpu;
-   Mem mem;
-   cpu.Reset(mem);
-   cpu.Excute(2,mem);
+    CPU cpu;
+    Mem mem;
+
+    cpu.Reset(mem);
+
+    mem.Data[0xFFFC] = 0x00;
+    mem.Data[0xFFFD] = 0x80;
+
+    u32 i = 0x8000;
+
+    mem.Data[i++] = CPU::INS_LDA_IM;
+    mem.Data[i++] = 0x05;
+
+    mem.Data[i++] = CPU::INS_JSR;
+    mem.Data[i++] = 0x06;
+    mem.Data[i++] = 0x80;
+
+    mem.Data[0x8006] = CPU::INS_LDA_IM;
+    mem.Data[0x8007] = 0x0A;
+
+    cpu.PC = mem[0xFFFC] | (mem[0xFFFD] << 8);
+
+    cpu.Excute(10, mem);
+
+    std::cout << "A = " << (int)cpu.A << std::endl;
+    std::cout << "PC = 0x" << std::hex << cpu.PC << std::endl;
+
     return 0;
 }

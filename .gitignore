@@ -2,3 +2,4 @@ main_6502
 *.o
 .vscode/
 main_6502
+build/*

@@ -85,15 +85,16 @@ Every instruction takes a specific number of "cycles" to complete.
 
 ## Current Implementation Status
 
-We have built the foundational skeleton of the emulator in `main_6502.cpp`. Here is how our code maps to the hardware concepts:
+We have refactored the emulator into a modular and scalable structure. Here is how the hardware concepts map to our files:
 
-| Concept | Code Implementation | Description |
+| Concept | Modular File(s) | Description |
 | :--- | :--- | :--- |
-| **The Mailboxes** | `struct Mem` | Contains `Byte Data[1024 * 64]` representing the 64KB memory space. |
-| **The Clerk** | `struct CPU` | Holds all registers and flags as member variables. |
-| **Startup** | `CPU::Reset()` | Wakes up the clerk, sets the PC to `0xFFFC` (standard 6502 start location), and clears flags. |
-| **Getting Instructions** | `CPU::FetchByte()` | The clerk walks to the mailbox at `PC`, increments `PC`, and returns the data. |
-| **Working** | `CPU::Execute()` | A loop where the clerk keeps fetching and executing instructions for a set number of cycles. |
+| **Common Types** | `include/common.h` | Basic 8-bit and 16-bit type definitions used throughout. |
+| **Instruction Set** | `include/instructions.h`| Definitions for all supported opcodes. |
+| **The Mailboxes** | `include/memory.h/cpp` | The `Mem` struct representing the 64KB memory space. |
+| **The Clerk** | `include/cpu.h/cpp` | The `CPU` struct with registers, flags, and execution logic. |
+| **Startup/Reset** | `CPU::Reset()` | Sets the PC to `0xFFFC` and clears flags. |
+| **Operations** | `CPU::Execute()` | Main loop for fetching and executing instructions. |
 
 ## Future Roadmap
 - [ ] **Teach the Clerk Math**: Implement official 6502 opcodes (ADC, SBC, etc.).

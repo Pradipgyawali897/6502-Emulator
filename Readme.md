@@ -9,16 +9,22 @@ The goal is to build a cycle-accurate emulator that effectively communicates the
 ## Getting Started
 
 ### Prerequisites
-- A C++ compiler (e.g., `g++`).
+- A C++ compiler supporting C++17.
+- [CMake](https://cmake.org/) (version 3.10 or higher).
 
-### Quick Start
-1.  **Compile**:
+### Quick Start (using CMake)
+1.  **Generate Build Files**:
     ```bash
-    g++ main_6502.cpp -o 6502_emu
+    mkdir build && cd build
+    cmake ..
     ```
-2.  **Run**:
+2.  **Compile**:
     ```bash
-    ./6502_emu
+    make
+    ```
+3.  **Run**:
+    ```bash
+    ./6502_emulator
     ```
 
 ## Learn More

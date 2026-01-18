@@ -27,5 +27,18 @@ The goal is to build a cycle-accurate emulator that effectively communicates the
     ./6502_emulator
     ```
 
+### Running Tests
+Automated tests are powered by Google Test. To run them:
+1.  **Build**:
+    ```bash
+    cd build
+    make
+    ```
+2.  **Run**:
+    ```bash
+    ./cpu_tests
+    ```
+    OR use `ctest`.
+
 ## Learn More
 For a deep dive into the processor architecture, our "Office Clerk" analogy, and exactly how the code implements the hardware, please see **[Processor Information](ProcessorInfo.Md)**.

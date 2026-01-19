@@ -10,8 +10,12 @@ include_directories(include)
 # Source files
 set(SOURCES
     main_6502.cpp
-    src/memory.cpp
-    src/cpu.cpp
+    src/memory/memory.cpp
+    src/cpu/core.cpp
+    src/cpu/fetch.cpp
+    src/cpu/addressing.cpp
+    src/cpu/instructions.cpp
+    src/cpu/stack.cpp
 )
 
 # Executable
@@ -34,8 +38,12 @@ add_executable(
   cpu_tests
   tests/cpu_tests.cpp
   tests/ADC_tests.cpp
-  src/memory.cpp
-  src/cpu.cpp
+  src/memory/memory.cpp
+  src/cpu/core.cpp
+  src/cpu/fetch.cpp
+  src/cpu/addressing.cpp
+  src/cpu/instructions.cpp
+  src/cpu/stack.cpp
 )
 target_link_libraries(
   cpu_tests

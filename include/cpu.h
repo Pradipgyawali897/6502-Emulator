@@ -24,9 +24,18 @@ struct CPU {
     Byte FetchByte(u32 &Cycles, Mem &memory);
     Word FetchWord(u32 &Cycles, Mem &memory);
     Byte ReadByte(u32 &Cycles, const Byte Address, Mem &memory);
-    void Execute(u32 Cycles, Mem &memory);
+    Byte FetchByteByZero(u32 &Cycles, Mem &memory);
+    Byte FetchByteByZeroX(u32 &Cycles, Mem &memory);
+    Byte FetchByteByZeroY(u32 &Cycles, Mem &memory);
+    void Execute(u32 &Cycles, Mem &memory);
 
 private:
+    void LDA(Byte value);
+    void ADC(Byte value);
+
+    void ExecuteLDA(Byte OpCode, u32 &Cycles, Mem &memory);
+    void ExecuteADC(Byte OpCode, u32 &Cycles, Mem &memory);
+
     void PushByte(u32 &Cycles, Byte Value, Mem &memory);
     void PushWord(u32 &Cycles, Word Value, Mem &memory);
     Byte PopByte(u32 &Cycles, Mem &memory);

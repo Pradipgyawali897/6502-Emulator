@@ -12,20 +12,20 @@ int main() {
 
     cpu.Reset(mem);
 
-    mem.Data[0xFFFC] = 0x00;
-    mem.Data[0xFFFD] = 0x80;
+    mem.WriteByte(0xFFFC, 0x00);
+    mem.WriteByte(0xFFFD, 0x80);
 
     u32 i = 0x8000;
 
-    mem.Data[i++] = INS_LDA_IM;
-    mem.Data[i++] = 0x05;
+    mem.WriteByte(i++, INS_LDA_IM);
+    mem.WriteByte(i++, 0x05);
 
-    mem.Data[i++] = INS_JSR;
-    mem.Data[i++] = 0x06;
-    mem.Data[i++] = 0x80;
+    mem.WriteByte(i++, INS_JSR);
+    mem.WriteByte(i++, 0x06);
+    mem.WriteByte(i++, 0x80);
 
-    mem.Data[0x8006] = INS_LDA_IM;
-    mem.Data[0x8007] = 0x0A;
+    mem.WriteByte(0x8006, INS_LDA_IM);
+    mem.WriteByte(0x8007, 0x0A);
 
     cpu.PC = mem[0xFFFC] | (mem[0xFFFD] << 8);
 

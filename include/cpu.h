@@ -6,7 +6,7 @@
 
 struct CPU {
     Word PC; // Program counter = 16 bit
-    Word SP;
+    Byte SP;
 
     Byte A, X, Y; // 8 bit Register
 
@@ -25,6 +25,12 @@ struct CPU {
     Word FetchWord(u32 &Cycles, Mem &memory);
     Byte ReadByte(u32 &Cycles, const Byte Address, Mem &memory);
     void Execute(u32 Cycles, Mem &memory);
+
+private:
+    void PushByte(u32 &Cycles, Byte Value, Mem &memory);
+    void PushWord(u32 &Cycles, Word Value, Mem &memory);
+    Byte PopByte(u32 &Cycles, Mem &memory);
+    Word PopWord(u32 &Cycles, Mem &memory);
 };
 
 #endif // CPU_H

@@ -1,8 +1,10 @@
 #ifndef COMMON_H
 #define COMMON_H
 
-using Byte = unsigned char;
-using Word = unsigned short;
-using u32 = unsigned int;
+#include <cstdint>
+
+using Byte = uint8_t;
+using Word = uint16_t;
+using u32 = uint32_t;
 
 #endif // COMMON_H

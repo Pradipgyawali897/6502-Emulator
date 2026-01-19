@@ -6,12 +6,23 @@ void Mem::initialize() {
     }
 }
 
-Byte Mem::operator[](u32 Address) const {
+Byte Mem::ReadByte(u32 Address) const {
+    if (Address >= MAX_MEM) return 0;
     return Data[Address];
 }
 
+void Mem::WriteByte(u32 Address, Byte Value) {
+    if (Address < MAX_MEM) {
+        Data[Address] = Value;
+    }
+}
+
+Byte Mem::operator[](u32 Address) const {
+    return ReadByte(Address);
+}
+
 void Mem::WriteWord(u32 &Cycles, const Word Value, const u32 Address) {
-    Data[Address] = Value & 0xFF;
-    Data[Address + 1] = (Value >> 8);
+    WriteByte(Address, Value & 0xFF);
+    WriteByte(Address + 1, (Value >> 8));
     Cycles -= 2;
 }

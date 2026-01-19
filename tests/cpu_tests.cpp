@@ -15,7 +15,7 @@ protected:
 
 TEST_F(CPUEmulatorTest, CPUCanReset) {
     EXPECT_EQ(cpu.PC, 0xFFFC);
-    EXPECT_EQ(cpu.SP, 0x0100);
+    EXPECT_EQ(cpu.SP, 0xFF);
     EXPECT_EQ(cpu.A, 0);
     EXPECT_EQ(cpu.X, 0);
     EXPECT_EQ(cpu.Y, 0);
@@ -25,8 +25,8 @@ TEST_F(CPUEmulatorTest, CPUCanReset) {
 
 TEST_F(CPUEmulatorTest, LDAImmediateCanLoadAValue) {
     using namespace CPUOpCodes;
-    mem.Data[0xFFFC] = INS_LDA_IM;
-    mem.Data[0xFFFD] = 0x84;
+    mem.WriteByte(0xFFFC, INS_LDA_IM);
+    mem.WriteByte(0xFFFD, 0x84);
     
     cpu.PC = 0xFFFC;
     cpu.Execute(2, mem);
@@ -38,8 +38,8 @@ TEST_F(CPUEmulatorTest, LDAImmediateCanLoadAValue) {
 
 TEST_F(CPUEmulatorTest, LDAImmediateCanLoadZero) {
     using namespace CPUOpCodes;
-    mem.Data[0xFFFC] = INS_LDA_IM;
-    mem.Data[0xFFFD] = 0x00;
+    mem.WriteByte(0xFFFC, INS_LDA_IM);
+    mem.WriteByte(0xFFFD, 0x00);
     
     cpu.PC = 0xFFFC;
     cpu.Execute(2, mem);

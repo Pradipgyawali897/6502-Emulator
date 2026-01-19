@@ -27,6 +27,9 @@ int main() {
     mem.WriteByte(0x8006, INS_LDA_IM);
     mem.WriteByte(0x8007, 0x0A);
 
+    mem.WriteByte(i++, INS_ADC_IM);
+    mem.WriteByte(i++, 0x03);
+
     cpu.PC = mem[0xFFFC] | (mem[0xFFFD] << 8);
 
     cpu.Execute(10, mem);

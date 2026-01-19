@@ -33,6 +33,7 @@ enable_testing()
 add_executable(
   cpu_tests
   tests/cpu_tests.cpp
+  tests/ADC_tests.cpp
   src/memory.cpp
   src/cpu.cpp
 )

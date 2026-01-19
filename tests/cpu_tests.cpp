@@ -1,17 +1,5 @@
-#include <gtest/gtest.h>
-#include "cpu.h"
-#include "memory.h"
+#include "test_common.h"
 #include "instructions.h"
-
-class CPUEmulatorTest : public ::testing::Test {
-protected:
-    CPU cpu;
-    Mem mem;
-
-    void SetUp() override {
-        cpu.Reset(mem);
-    }
-};
 
 TEST_F(CPUEmulatorTest, CPUCanReset) {
     EXPECT_EQ(cpu.PC, 0xFFFC);
@@ -43,6 +31,48 @@ TEST_F(CPUEmulatorTest, LDAImmediateCanLoadZero) {
     
     cpu.PC = 0xFFFC;
     cpu.Execute(2, mem);
+
+    EXPECT_EQ(cpu.A, 0x00);
+    EXPECT_TRUE(cpu.Z);
+    EXPECT_FALSE(cpu.N);
+}
+
+TEST_F(CPUEmulatorTest, LDAZeroPageCanLoadAValue) {
+    using namespace CPUOpCodes;
+    mem.WriteByte(0x0020, 0x7F);
+    mem.WriteByte(0xFFFC, INS_LDA_ZP);
+    mem.WriteByte(0xFFFD, 0x20);
+    
+    cpu.PC = 0xFFFC;
+    cpu.Execute(3, mem);
+
+    EXPECT_EQ(cpu.A, 0x7F);
+    EXPECT_FALSE(cpu.Z);
+    EXPECT_FALSE(cpu.N);
+}
+
+TEST_F(CPUEmulatorTest, LDAZeroPageCanLoadNegativeValue) {
+    using namespace CPUOpCodes;
+    mem.WriteByte(0x0030, 0xFF);
+    mem.WriteByte(0xFFFC, INS_LDA_ZP);
+    mem.WriteByte(0xFFFD, 0x30);
+    
+    cpu.PC = 0xFFFC;
+    cpu.Execute(3, mem);
+
+    EXPECT_EQ(cpu.A, 0xFF);
+    EXPECT_FALSE(cpu.Z);
+    EXPECT_TRUE(cpu.N);
+}
+
+TEST_F(CPUEmulatorTest, LDAZeroPageCanLoadZero) {
+    using namespace CPUOpCodes;
+    mem.WriteByte(0x0040, 0x00);
+    mem.WriteByte(0xFFFC, INS_LDA_ZP);
+    mem.WriteByte(0xFFFD, 0x40);
+    
+    cpu.PC = 0xFFFC;
+    cpu.Execute(3, mem);
 
     EXPECT_EQ(cpu.A, 0x00);
     EXPECT_TRUE(cpu.Z);

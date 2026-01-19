@@ -74,6 +74,18 @@ void CPU::Execute(u32 Cycles, Mem &memory) {
             Cycles--;
             break;
         }
+        case INS_ADC_IM:
+        {
+            const Byte value = FetchByte(Cycles, memory);
+            const Word sum = static_cast<Word>(A) + static_cast<Word>(value) + static_cast<Word>(C);
+            
+            V = (~(static_cast<Word>(A) ^ static_cast<Word>(value)) & (static_cast<Word>(A) ^ sum) & 0x80) ? 1 : 0;
+            
+            A = static_cast<Byte>(sum & 0xFF); 
+            C = (sum > 0xFF) ? 1 : 0;
+            LDASetStatus();
+            break;
+        }
         default:
             std::cerr << "Illegal Opcode: " << std::hex << (int)Ins << std::endl;
             Cycles = 0; // Halt execution

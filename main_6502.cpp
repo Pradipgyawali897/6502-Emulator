@@ -29,7 +29,7 @@ int main() {
 
     cpu.PC = mem[0xFFFC] | (mem[0xFFFD] << 8);
 
-    cpu.Excute(10, mem);
+    cpu.Execute(10, mem);
 
     std::cout << "A = " << (int)cpu.A << std::endl;
     std::cout << "PC = 0x" << std::hex << cpu.PC << std::endl;

@@ -23,8 +23,8 @@ struct CPU {
     void LDASetStatus();
     Byte FetchByte(u32 &Cycles, Mem &memory);
     Word FetchWord(u32 &Cycles, Mem &memory);
-    Byte ReadByte(u32 &Cycles, Byte &Address, Mem &memory);
-    void Excute(u32 Cycles, Mem &memory);
+    Byte ReadByte(u32 &Cycles, const Byte Address, Mem &memory);
+    void Execute(u32 Cycles, Mem &memory);
 };
 
 #endif // CPU_H

@@ -29,7 +29,7 @@ TEST_F(CPUEmulatorTest, LDAImmediateCanLoadAValue) {
     mem.Data[0xFFFD] = 0x84;
     
     cpu.PC = 0xFFFC;
-    cpu.Excute(2, mem);
+    cpu.Execute(2, mem);
 
     EXPECT_EQ(cpu.A, 0x84);
     EXPECT_FALSE(cpu.Z);
@@ -42,7 +42,7 @@ TEST_F(CPUEmulatorTest, LDAImmediateCanLoadZero) {
     mem.Data[0xFFFD] = 0x00;
     
     cpu.PC = 0xFFFC;
-    cpu.Excute(2, mem);
+    cpu.Execute(2, mem);
 
     EXPECT_EQ(cpu.A, 0x00);
     EXPECT_TRUE(cpu.Z);

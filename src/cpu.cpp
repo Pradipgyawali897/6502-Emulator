@@ -8,7 +8,7 @@ void CPU::Reset(Mem &memory) {
     D = 0;
     A = X = Y = 0;
     C = Z = I = D = B = V = N = 0;
-    memory.initilize();
+    memory.initialize();
 }
 
 void CPU::LDASetStatus() {
@@ -17,7 +17,7 @@ void CPU::LDASetStatus() {
 }
 
 Byte CPU::FetchByte(u32 &Cycles, Mem &memory) {
-    Byte Data = memory[PC];
+    const Byte Data = memory[PC];
     PC++;
     Cycles--;
     return Data;
@@ -35,20 +35,20 @@ Word CPU::FetchWord(u32 &Cycles, Mem &memory) {
     return Data;
 }
 
-Byte CPU::ReadByte(u32 &Cycles, Byte &Address, Mem &memory) {
-    Byte Data = memory[Address];
+Byte CPU::ReadByte(u32 &Cycles, const Byte Address, Mem &memory) {
+    const Byte Data = memory[Address];
     Cycles--;
     return Data;
 }
 
-void CPU::Excute(u32 Cycles, Mem &memory) {
+void CPU::Execute(u32 Cycles, Mem &memory) {
     using namespace CPUOpCodes;
     while (Cycles > 0) {
-        Byte Ins = FetchByte(Cycles, memory);
+        const Byte Ins = FetchByte(Cycles, memory);
 
         switch (Ins) {
         case INS_LDA_IM: {
-            Byte value = FetchByte(Cycles, memory);
+            const Byte value = FetchByte(Cycles, memory);
             A = value;
             LDASetStatus();
             break;
@@ -68,7 +68,7 @@ void CPU::Excute(u32 Cycles, Mem &memory) {
             break;
         }
         case INS_JSR: {
-            Word SubAddr = FetchWord(Cycles, memory);
+            const Word SubAddr = FetchWord(Cycles, memory);
             memory.WriteWord(Cycles, PC - 1, SP);
             PC = SubAddr;
             Cycles--;

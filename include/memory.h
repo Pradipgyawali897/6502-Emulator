@@ -12,6 +12,7 @@ struct Mem {
     void WriteByte(u32 Address, Byte Value);
     Byte operator[](u32 Address) const;
 
+    [[nodiscard]] Word ReadWord(u32 &Cycles, u32 Address) const;
     void WriteWord(u32 &Cycles, const Word Value, const u32 Address);
 
 private:

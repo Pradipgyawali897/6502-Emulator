@@ -93,6 +93,15 @@ TEST_F(CPUEmulatorTest, LDAZeroPageXCanWrapAround) {
     EXPECT_EQ(cpu.A, 0x33);
 }
 
+TEST_F(CPUEmulatorTest, MemoryReadOutOfBoundsReturnsZero) {
+    EXPECT_EQ(mem.ReadByte(Mem::MAX_MEM + 100), 0x00);
+}
+
+TEST_F(CPUEmulatorTest, MemoryWriteOutOfBoundsDoesNothing) {
+    mem.WriteByte(Mem::MAX_MEM + 100, 0xFF);
+    EXPECT_EQ(mem.ReadByte(Mem::MAX_MEM + 100), 0x00);
+}
+
 TEST_F(CPUEmulatorTest, LDAImmediateRobust) {
     using namespace CPUOpCodes;
     mem.WriteByte(0xFFFC, INS_LDA_IM);

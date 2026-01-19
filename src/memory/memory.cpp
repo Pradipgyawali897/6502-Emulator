@@ -1,3 +1,4 @@
+#include <iostream>
 #include "../include/memory.h"
 
 void Mem::initialize() {
@@ -7,18 +8,30 @@ void Mem::initialize() {
 }
 
 Byte Mem::ReadByte(u32 Address) const {
-    if (Address >= MAX_MEM) return 0;
+    if (Address >= MAX_MEM) {
+        std::cerr << "Memory Read Error: Address " << std::hex << Address << " is out of bounds!" << std::endl;
+        return 0;
+    }
     return Data[Address];
 }
 
 void Mem::WriteByte(u32 Address, Byte Value) {
-    if (Address < MAX_MEM) {
-        Data[Address] = Value;
+    if (Address >= MAX_MEM) {
+        std::cerr << "Memory Write Error: Address " << std::hex << Address << " is out of bounds!" << std::endl;
+        return;
     }
+    Data[Address] = Value;
 }
 
 Byte Mem::operator[](u32 Address) const {
     return ReadByte(Address);
+}
+
+Word Mem::ReadWord(u32 &Cycles, u32 Address) const {
+    Word Data = ReadByte(Address);
+    Data |= (static_cast<Word>(ReadByte(Address + 1)) << 8);
+    Cycles -= 2;
+    return Data;
 }
 
 void Mem::WriteWord(u32 &Cycles, const Word Value, const u32 Address) {

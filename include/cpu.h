@@ -29,12 +29,21 @@ struct CPU {
     Byte FetchByteByZeroY(u32 &Cycles, Mem &memory);
     void Execute(u32 &Cycles, Mem &memory);
 
+    struct Instruction {
+        const char* Name;
+        void (CPU::*Executor)(Byte, u32&, Mem&);
+    };
+
+    static Instruction Table[256];
+    static void InitTable();
+
 private:
     void LDA(Byte value);
     void ADC(Byte value);
 
     void ExecuteLDA(Byte OpCode, u32 &Cycles, Mem &memory);
     void ExecuteADC(Byte OpCode, u32 &Cycles, Mem &memory);
+    void ExecuteJSR(Byte OpCode, u32 &Cycles, Mem &memory);
 
     void PushByte(u32 &Cycles, Byte Value, Mem &memory);
     void PushWord(u32 &Cycles, Word Value, Mem &memory);

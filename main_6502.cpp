@@ -29,6 +29,14 @@ int main() {
 
     mem.WriteByte(i++, INS_ADC_IM);
     mem.WriteByte(i++, 0x03);
+    
+    cpu.X=0x01;
+    mem.WriteByte(i++,INS_ADC_ABSX);
+    mem.WriteByte(i++, 0x02);
+
+    cpu.Y=0x01;
+    mem.WriteByte(i++,INS_ADC_ABSY);
+    mem.WriteByte(i++, 0x02);
 
     cpu.PC = mem[0xFFFC] | (mem[0xFFFD] << 8);
 

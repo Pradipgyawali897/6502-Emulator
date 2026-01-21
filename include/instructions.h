@@ -12,6 +12,10 @@ namespace CPUOpCodes {
     static constexpr Byte INS_ADC_ZP = 0x65;
     static constexpr Byte INS_ADC_ZPX = 0x75;
     static constexpr Byte INS_ADC_ZPY = 0x79;
+    static constexpr Byte INS_ADC_ABS = 0x6D;
+    static constexpr Byte INS_ADC_ABSX = 0x7D;
+    static constexpr Byte INS_ADC_ABSY = 0x79;
+    
 }
 
 #endif // INSTRUCTIONS_H

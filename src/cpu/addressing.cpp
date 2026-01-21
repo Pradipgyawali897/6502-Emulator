@@ -18,3 +18,23 @@ Byte CPU::FetchByteByZeroY(u32 &Cycles, Mem &memory) {
     Cycles--; // 1 cycle for addition
     return ReadByte(Cycles, Address, memory);
 }
+
+Byte CPU::FetchByteByAbsolute(u32 &Cycles, Mem &memory) {
+    const Word Address = FetchWord(Cycles, memory);
+    return ReadByte(Cycles, Address, memory);
+}
+
+
+Byte CPU::FetchByteByAbsoluteX(u32 &cycles,Mem &memory){
+    Word Address=FetchWord(cycles,memory);
+    Address+=static_cast<Word>(X);
+    cycles --;
+    return ReadByte(cycles,Address,memory);
+}
+
+Byte CPU::FetchByteByAbsoluteY(u32 &cycles,Mem &memory){
+    Word Address=FetchWord(cycles,memory);
+    Address+=static_cast<Word>(Y);
+    cycles --;
+    return ReadByte(cycles,Address,memory);
+}

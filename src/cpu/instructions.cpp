@@ -56,7 +56,15 @@ void CPU::ExecuteADC(Byte OpCode, u32 &Cycles, Mem &memory) {
         ADC(FetchByteByZeroY(Cycles, memory));
         break;
     }
+    case INS_ADC_ABS: {
+        ADC(FetchByteByAbsolute(Cycles, memory));
+        break;
     }
+    case INS_ADC_ABSX: {
+        ADC(FetchByteByAbsolute(Cycles, memory));
+        break;
+    }
+}
 }
 
 CPU::Instruction CPU::Table[256] = {};
@@ -85,7 +93,10 @@ void CPU::InitTable() {
         { INS_ADC_ZP, "ADC_ZP", &CPU::ExecuteADC },
         { INS_ADC_ZPX, "ADC_ZPX", &CPU::ExecuteADC },
         { INS_ADC_ZPY, "ADC_ZPY", &CPU::ExecuteADC },
-        { INS_JSR, "JSR", &CPU::ExecuteJSR }
+        {INS_ADC_ABS, "ADC_ABS", &CPU::ExecuteADC },
+        {INS_ADC_ABSX, "ADC_ABSX", &CPU::ExecuteADC },
+        {INS_ADC_ABSY, "ADC_ABSY", &CPU::ExecuteADC },
+        { INS_JSR, "JSR", &CPU::ExecuteJSR },
     };
 
     for (const auto& i : entries) {

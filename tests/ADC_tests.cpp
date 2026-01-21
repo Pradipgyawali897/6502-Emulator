@@ -45,6 +45,25 @@ TEST_P(ADCParamTest, ADCWorksCorrectly) {
         mem.WriteByte(0x15, t.operand);
     }
 
+    else if(t.opcode==CPUOpCodes::INS_ADC_ABSX){
+        cpu.X=0x01;
+        mem.WriteByte(0xFFFD,0x00);
+        mem.WriteByte(0xFFFE,0x20);
+        mem.WriteByte(0x2001,t.operand);
+    }
+    else if(t.opcode==CPUOpCodes::INS_ADC_ABSY){
+        cpu.Y=0x01;
+        mem.WriteByte(0xFFFD,0x00);
+        mem.WriteByte(0xFFFE,0x20);
+        mem.WriteByte(0x2001,t.operand);
+    }
+    else if(t.opcode==CPUOpCodes::INS_ADC_ABSY){
+        cpu.Y=0x01;
+        mem.WriteByte(0xFFFD,0x00);
+        mem.WriteByte(0xFFFE,0x20);
+        mem.WriteByte(0x2001,t.operand);
+    }
+
     u32 cyclesUsed = t.expectedCycles;
     cpu.Execute(cyclesUsed, mem);
 
@@ -74,6 +93,14 @@ INSTANTIATE_TEST_SUITE_P(
         ADCTestCase{0x69, 0x05, 0x05, 1, 0x0B, 0, 0, 0, 0, 2},
         ADCTestCase{0x69, 0x00, 0x00, 0, 0x00, 0, 1, 0, 0, 2},
         ADCTestCase{0x69, 0x7F, 0x7F, 0, 0xFE, 0, 0, 1, 1, 2},
-        ADCTestCase{0x69, 0x80, 0xFF, 0, 0x7F, 1, 0, 0, 1, 2}
+        ADCTestCase{0x6D, 0x20, 0x10, 0, 0x30, 0, 0, 0, 0, 4}, 
+        ADCTestCase{0x6D, 0x01, 0xFF, 0, 0x00, 1, 1, 0, 0, 4},  
+        ADCTestCase{0x6D, 0x01, 0x7F, 0, 0x80, 0, 0, 1, 1, 4}, 
+        ADCTestCase{0x7D, 0x02, 0x01, 0, 0x03, 0, 0, 0, 0, 4},   
+        ADCTestCase{0x7D, 0x80, 0x80, 0, 0x00, 1, 1, 0, 1, 4},  
+        ADCTestCase{0x7D, 0x01, 0x01, 0, 0x02, 0, 0, 0, 0, 5},   
+        ADCTestCase{0x79, 0x05, 0x05, 0, 0x0A, 0, 0, 0, 0, 4},   
+        ADCTestCase{0x79, 0x40, 0x40, 0, 0x80, 0, 0, 1, 1, 4},  
+        ADCTestCase{0x79, 0x01, 0xFF, 0, 0x00, 1, 1, 0, 0, 5}   
     )
 );

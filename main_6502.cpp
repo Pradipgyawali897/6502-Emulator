@@ -1,50 +1,51 @@
-#include <iostream>
-#include <stdlib.h>
 #include "include/common.h"
-#include "include/memory.h"
 #include "include/cpu.h"
 #include "include/instructions.h"
+#include "include/memory.h"
+#include <iostream>
+#include <stdlib.h>
 
 int main() {
-    using namespace CPUOpCodes;
-    CPU cpu;
-    Mem mem;
+  using namespace CPUOpCodes;
 
-    cpu.Reset(mem);
+  CPU cpu;
+  Mem mem;
 
-    mem.WriteByte(0xFFFC, 0x00);
-    mem.WriteByte(0xFFFD, 0x80);
+  cpu.Reset(mem);
 
-    u32 i = 0x8000;
+  Word i = 0x8000;
+  cpu.PC = i;
 
-    mem.WriteByte(i++, INS_LDA_IM);
-    mem.WriteByte(i++, 0x05);
+  mem.WriteByte(i++, INS_LDA_IM);
+  mem.WriteByte(i++, 0x05);
 
-    mem.WriteByte(i++, INS_JSR);
-    mem.WriteByte(i++, 0x06);
-    mem.WriteByte(i++, 0x80);
+  mem.WriteByte(i++, INS_LDA_IM);
+  mem.WriteByte(i++, 0x0A);
 
-    mem.WriteByte(0x8006, INS_LDA_IM);
-    mem.WriteByte(0x8007, 0x0A);
+  mem.WriteByte(i++, INS_ADC_IM);
+  mem.WriteByte(i++, 0x03);
 
-    mem.WriteByte(i++, INS_ADC_IM);
-    mem.WriteByte(i++, 0x03);
-    
-    cpu.X=0x01;
-    mem.WriteByte(i++,INS_ADC_ABSX);
-    mem.WriteByte(i++, 0x02);
+  Word dataAddr = 0x1000;
+  mem.WriteByte(dataAddr, 0x04);
 
-    cpu.Y=0x01;
-    mem.WriteByte(i++,INS_ADC_ABSY);
-    mem.WriteByte(i++, 0x02);
+  cpu.X = 0x00;
 
-    cpu.PC = mem[0xFFFC] | (mem[0xFFFD] << 8);
+  mem.WriteByte(i++, INS_ADC_ABSX);
+  mem.WriteByte(i++, 0x00);
+  mem.WriteByte(i++, 0x10);
+  
+  mem.WriteByte(i++,INS_JSR);
+  mem.WriteByte(i++,0x90);
+  mem.WriteByte(i++,0x80);
+  mem.WriteByte(i++, INS_BRK);
 
-    u32 cycles = 10;
-    cpu.Execute(cycles, mem);
+  u32 cycles = 100;
+  cpu.Execute(cycles, mem);
 
-    std::cout << "A = " << (int)cpu.A << std::endl;
-    std::cout << "PC = 0x" << std::hex << cpu.PC << std::endl;
+  std::cout << "--- Execution Results ---" << std::endl;
+  std::cout << "A  " << (int)cpu.A << std::endl;
+  std::cout << "PC: 0x" << std::hex << cpu.PC << std::endl;
+  std::cout << "Cycles Remaining: " << std::dec << cycles << std::endl;
 
-    return 0;
+  return 0;
 }

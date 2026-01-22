@@ -1,4 +1,4 @@
-#include "../include/cpu.h"
+#include "cpu.h"
 
 void CPU::PushByte(u32 &Cycles, Byte Value, Mem &memory) {
     memory.WriteByte(0x0100 | SP, Value);

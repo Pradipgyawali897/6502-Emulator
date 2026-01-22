@@ -1,4 +1,4 @@
-#include "../include/cpu.h"
+#include "cpu.h"
 
 Byte CPU::FetchByteByZero(u32 &Cycles, Mem &memory) {
     const Byte Address = FetchByte(Cycles, memory);
@@ -26,15 +26,19 @@ Byte CPU::FetchByteByAbsolute(u32 &Cycles, Mem &memory) {
 
 
 Byte CPU::FetchByteByAbsoluteX(u32 &cycles,Mem &memory){
-    Word Address=FetchWord(cycles,memory);
-    Address+=static_cast<Word>(X);
-    cycles --;
+    Word BaseAddress=FetchWord(cycles,memory);
+    Word Address=BaseAddress+static_cast<Word>(X);
+    bool is_page_crossed=(BaseAddress& 0xFF00) != (Address & 0xFF00);
+    if(is_page_crossed)
+        cycles --;
     return ReadByte(cycles,Address,memory);
 }
 
 Byte CPU::FetchByteByAbsoluteY(u32 &cycles,Mem &memory){
-    Word Address=FetchWord(cycles,memory);
-    Address+=static_cast<Word>(Y);
-    cycles --;
+    Word BaseAddress=FetchWord(cycles,memory);
+    Word Address=BaseAddress+static_cast<Word>(Y);
+    bool is_page_crossed=(BaseAddress& 0xFF00) != (Address & 0xFF00);
+    if(is_page_crossed)
+        cycles --;
     return ReadByte(cycles,Address,memory);
 }

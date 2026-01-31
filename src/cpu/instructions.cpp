@@ -59,6 +59,37 @@ void CPU::ExecuteADC_ABSY(Byte, u32 &Cycles, Mem &memory) {
   ADC(FetchByteByAbsoluteY(Cycles, memory));
 }
 
+void CPU::ExecuteAND_IM(Byte, u32 &Cycles, Mem &memory) {
+  Byte value = FetchByte(Cycles, memory);
+  A = A & value;
+  LDASetStatus();
+}
+void CPU::ExecuteAND_ZP(Byte, u32 &Cycles, Mem &memory) {
+  Byte value = FetchByteByZero(Cycles, memory);
+  A = A & value;
+  LDASetStatus();
+}
+void CPU::ExecuteAND_ZPX(Byte, u32 &Cycles, Mem &memory) {
+  Byte value = FetchByteByZeroX(Cycles, memory);
+  A = A & value;
+  LDASetStatus();
+}
+void CPU::ExecuteAND_ABS(Byte, u32 &Cycles, Mem &memory) {
+  Byte value = FetchByteByAbsolute(Cycles, memory);
+  A = A & value;
+  LDASetStatus();
+}
+void CPU::ExecuteAND_ABSX(Byte, u32 &Cycles, Mem &memory) {
+  Byte value = FetchByteByAbsoluteX(Cycles, memory);
+  A = A & value;
+  LDASetStatus();
+}
+void CPU::ExecuteAND_ABSY(Byte, u32 &Cycles, Mem &memory) {
+  Byte value = FetchByteByAbsoluteY(Cycles, memory);
+  A = A & value;
+  LDASetStatus();
+}
+
 void CPU::ExecuteBRK(Byte, u32 &Cycles, Mem &) { Cycles = 0; }
 
 CPU::Instruction CPU::Table[256] = {};
@@ -91,6 +122,12 @@ void CPU::InitTable() {
       {INS_ADC_ABSX, "ADC_ABSX", &CPU::ExecuteADC_ABSX},
       {INS_ADC_ABSY, "ADC_ABSY", &CPU::ExecuteADC_ABSY},
       {INS_BRK, "BRK", &CPU::ExecuteBRK},
+      {INS_AND_IM, "AND_IM", &CPU::ExecuteAND_IM},
+      {INS_AND_ZP, "AND_ZP", &CPU::ExecuteAND_ZP},
+      {INS_AND_ZPX, "AND_ZPX", &CPU::ExecuteAND_ZPX},
+      {INS_AND_ABS, "AND_ABS", &CPU::ExecuteAND_ABS},
+      {INS_AND_ABSX, "AND_ABSX", &CPU::ExecuteAND_ABSX},
+      {INS_AND_ABSY, "AND_ABSY", &CPU::ExecuteAND_ABSY},
   };
 
   for (const auto &i : entries) {

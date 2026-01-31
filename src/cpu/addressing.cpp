@@ -1,4 +1,5 @@
-#include "cpu.h"
+#include "../include/cpu.h"
+#include "../include/memory.h"
 
 Byte CPU::FetchByteByZero(u32 &Cycles, Mem &memory) {
     const Byte Address = FetchByte(Cycles, memory);

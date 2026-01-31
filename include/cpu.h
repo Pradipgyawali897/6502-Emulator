@@ -58,6 +58,14 @@ private:
 
   void ExecuteJSR(Byte OpCode, u32 &Cycles, Mem &memory);
 
+  void ExecuteAND_IM(Byte OpCode, u32 &Cycles, Mem &memory);
+  void ExecuteAND_ZP(Byte OpCode, u32 &Cycles, Mem &memory);
+  void ExecuteAND_ZPX(Byte OpCode, u32 &Cycles, Mem &memory);
+  void ExecuteAND_ABS(Byte OpCode, u32 &Cycles, Mem &memory);
+  void ExecuteAND_ABSX(Byte OpCode, u32 &Cycles, Mem &memory);
+  void ExecuteAND_ABSY(Byte OpCode, u32 &Cycles, Mem &memory);
+  
+
   void PushByte(u32 &Cycles, Byte Value, Mem &memory);
   void PushWord(u32 &Cycles, Word Value, Mem &memory);
   Byte PopByte(u32 &Cycles, Mem &memory);

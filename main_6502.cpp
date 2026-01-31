@@ -34,11 +34,19 @@ int main() {
   mem.WriteByte(i++, 0x00);
   mem.WriteByte(i++, 0x10);
   
+  
+  mem.WriteByte(i++,INS_LDA_IM);
+  mem.WriteByte(i++,0xFF);
+  
+  mem.WriteByte(i++,INS_AND_ABS);
+  mem.WriteByte(i++,0x00);
+  mem.WriteByte(i++,0x10);
+  mem.WriteByte(0x0010,0x0F);
+  
   mem.WriteByte(i++,INS_JSR);
   mem.WriteByte(i++,0x90);
   mem.WriteByte(i++,0x80);
-  mem.WriteByte(i++, INS_BRK);
-
+  mem.WriteByte(i++,INS_BRK);
   u32 cycles = 100;
   cpu.Execute(cycles, mem);
 
